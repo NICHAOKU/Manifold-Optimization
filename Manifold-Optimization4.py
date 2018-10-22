@@ -131,7 +131,7 @@ for i in range(shipNum):
 #constraint 9
 for t in range(maxTime):
     for a in range(jNum):
-        prob += pulp.lpSum(X[i,a,t] for i in range(shipNum))<=1
+        prob += pulp.lpSum(X_hat[i,a,t] for i in range(shipNum))<=1
     for b in range(pNum):
         prob += pulp.lpSum(Y[i,b,t] for i in range(shipNum))<=1
     for c in range(tNum):
