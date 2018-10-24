@@ -37,19 +37,19 @@ minTime = 0
 vLimit = 350
 M = 100000
 
-W = [LpVariable("W{}{}{}{}{}".format(i,a,b,c,t), 0,1,LpInteger) for i in range(shipNum) for a in range(jNum) for b in range(pNum) for c in range(tNum) for t in range(maxTime)]
-X = [LpVariable("X{}{}{}".format(i,a,t), 0,1,LpInteger) for i in range(shipNum) for a in range(jNum) for t in range(maxTime)]
-X_hat = [LpVariable("X_hat{}{}{}".format(i,a,t), 0,1,LpInteger) for i in range(shipNum) for a in range(jNum) for t in range(maxTime)]
-Y = [LpVariable("Y{}{}{}".format(i,b,t), 0,1,LpInteger) for i in range(shipNum) for b in range(pNum) for t in range(maxTime)]
-Z = [LpVariable("Z{}{}{}".format(i,c,t), 0,1,LpInteger) for i in range(shipNum) for c in range(tNum) for t in range(maxTime)]
+W = [LpVariable("W{}n{}n{}n{}n{}".format(i,a,b,c,t), 0,1,LpInteger) for i in range(shipNum) for a in range(jNum) for b in range(pNum) for c in range(tNum) for t in range(maxTime)]
+X = [LpVariable("X{}n{}n{}".format(i,a,t), 0,1,LpInteger) for i in range(shipNum) for a in range(jNum) for t in range(maxTime)]
+X_hat = [LpVariable("X_hat{}n{}n{}".format(i,a,t), 0,1,LpInteger) for i in range(shipNum) for a in range(jNum) for t in range(maxTime)]
+Y = [LpVariable("Y{}n{}n{}".format(i,b,t), 0,1,LpInteger) for i in range(shipNum) for b in range(pNum) for t in range(maxTime)]
+Z = [LpVariable("Z{}n{}n{}".format(i,c,t), 0,1,LpInteger) for i in range(shipNum) for c in range(tNum) for t in range(maxTime)]
 
 Tstart = [LpVariable("Tstart{}".format(i), 0,maxTime,LpInteger) for i in range(shipNum)]
 Tstop = [LpVariable("Tstop{}".format(i), 0,maxTime,LpInteger) for i in range(shipNum)]
-T = [LpVariable("T{}{}".format(i,t), 0,1,LpInteger) for i in range(shipNum) for t in range(maxTime)]
-T_hat = [LpVariable("T_hat{}{}".format(i,t), 0,1,LpInteger) for i in range(shipNum) for t in range(maxTime)]
+T = [LpVariable("T{}n{}".format(i,t), 0,1,LpInteger) for i in range(shipNum) for t in range(maxTime)]
+T_hat = [LpVariable("T_hat{}n{}".format(i,t), 0,1,LpInteger) for i in range(shipNum) for t in range(maxTime)]
 
-X_x = [LpVariable("X_x{}{}".format(i,a), 0,1,LpInteger) for i in range(shipNum) for a in range(jNum)]
-Z_z = [LpVariable("Z_z{}{}".format(i,c), 0,1,LpInteger) for i in range(shipNum) for c in range(tNum)]
+X_x = [LpVariable("X_x{}n{}".format(i,a), 0,1,LpInteger) for i in range(shipNum) for a in range(jNum)]
+Z_z = [LpVariable("Z_z{}n{}".format(i,c), 0,1,LpInteger) for i in range(shipNum) for c in range(tNum)]
 
 W = np.array(W).reshape(shipNum,jNum,pNum,tNum,maxTime)
 X = np.array(X).reshape(shipNum,jNum,maxTime)
