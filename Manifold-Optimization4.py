@@ -23,14 +23,17 @@ def transform(filePath):
 
     Vol = shipInfo['Ship_Volume']
     TArr = shipInfo['Arrival_Time']
+    C = shipInfo['Docking Cost']
     cap = pumpInfo['Capacity']
     tLimit = tankInfo['Capacity']
+    tLimit = tankInfo['Capacity']
+    tExist = tankInfo['Existing Stock']
     shipNum = len(Vol)
     tNum = len(tLimit)
     pNum = len(cap)
-    return shipNum, jNum, tNum, pNum, Vol, TArr, cap, tLimit, maintInfo
+    return shipNum, jNum, tNum, pNum, Vol, TArr, cap, tLimit, maintInfo, C, tExist
 
-shipNum, jNum, tNum, pNum, Vol, TArr, cap, tLimit, maintInfo = transform('data.xlsx')
+shipNum, jNum, tNum, pNum, Vol, TArr, cap, tLimit, maintInfo,  C, tExist = transform('data.xlsx')
 
 maxTime = 70
 minTime = 0
@@ -66,7 +69,7 @@ Z_z = np.array(Z_z).reshape(shipNum,tNum)
 prob = LpProblem("problem", LpMinimize)
 
 # defines the objective function to minimize
-prob += pulp.lpSum((Tstop[i]-TArr[i]) for i in range(shipNum))
+prob += pulp.lpSum((Tstop[i]-TArr[i]) * C[i] for i in range(shipNum))
 
 #define constrains
 
@@ -90,7 +93,7 @@ for i in range(shipNum):
 for i in range(shipNum):
     for a in range(jNum):
         prob += lpSum(X[i,a,t] for t in range(maxTime)) >= X_x[i,a]
-        prob += lpSum(X[i,a,t] for t in range(maxTime)) <= X_x[i,a]*M
+        prob += lpSum(X_hat[i,a,t] for t in range(maxTime)) <= X_x[i,a]*M
         for t in range(maxTime):
             prob += X[i,a,t] <= X_hat[i,a,t]
     for c in range(tNum):
@@ -161,7 +164,7 @@ for i in range(shipNum):
 for c in range(tNum):
     for t in range(maxTime):
         prob += pulp.lpSum(W[i,a,b,c,t0]*cap[b]*(int(Vol[i]>0)-int(Vol[i]<0)) for i in range(shipNum) for a in range(jNum) for b in range(pNum) for t0 in range(t))<=tLimit[c]
-        prob += pulp.lpSum(W[i,a,b,c,t0]*cap[b]*(int(Vol[i]>0)-int(Vol[i]<0)) for i in range(shipNum) for a in range(jNum) for b in range(pNum) for t0 in range(t))>=0
+        prob += pulp.lpSum(W[i,a,b,c,t0]*cap[b]*(int(Vol[i]>0)-int(Vol[i]<0)) for i in range(shipNum) for a in range(jNum) for b in range(pNum) for t0 in range(t))+tExist[c]>=0
 
 prob.writeLP("ManifoldOptimization.lp")
 
