@@ -163,7 +163,7 @@ for i in range(shipNum):
 #constraint 12
 for c in range(tNum):
     for t in range(maxTime):
-        prob += pulp.lpSum(W[i,a,b,c,t0]*cap[b]*(int(Vol[i]>0)-int(Vol[i]<0)) for i in range(shipNum) for a in range(jNum) for b in range(pNum) for t0 in range(t))<=tLimit[c]
+        prob += pulp.lpSum(W[i,a,b,c,t0]*cap[b]*(int(Vol[i]>0)-int(Vol[i]<0)) for i in range(shipNum) for a in range(jNum) for b in range(pNum) for t0 in range(t))+tExist[c]<=tLimit[c]
         prob += pulp.lpSum(W[i,a,b,c,t0]*cap[b]*(int(Vol[i]>0)-int(Vol[i]<0)) for i in range(shipNum) for a in range(jNum) for b in range(pNum) for t0 in range(t))+tExist[c]>=0
 
 prob.writeLP("ManifoldOptimization.lp")
